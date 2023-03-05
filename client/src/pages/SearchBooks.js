@@ -43,6 +43,7 @@ const SearchBooks = () => {
       }
 
       const { items } = await response.json();
+      console.log(items)
 
       const bookData = items.map((book) => ({
         bookId: book.id,
@@ -50,6 +51,7 @@ const SearchBooks = () => {
         title: book.volumeInfo.title,
         description: book.volumeInfo.description,
         image: book.volumeInfo.imageLinks?.thumbnail || '',
+        link: book.selfLink
       }));
 
       setSearchedBooks(bookData);
@@ -91,7 +93,6 @@ const SearchBooks = () => {
         <Container>
           <h1>Search for Books!</h1>
           <Form onSubmit={handleFormSubmit}>
-            <Form.Row>
               <Col xs={12} md={8}>
                 <Form.Control
                   name='searchInput'
@@ -103,32 +104,32 @@ const SearchBooks = () => {
                 />
               </Col>
               <Col xs={12} md={4}>
-                <Button type='submit' variant='success' size='lg'>
+                <Button type='submit' variant='success' size='lg' className='my-2'>
                   Submit Search
                 </Button>
               </Col>
-            </Form.Row>
           </Form>
         </Container>
       </div>
 
-      <Container>
+      <Container className='my-2'>
         <h2>
           {searchedBooks.length
             ? `Viewing ${searchedBooks.length} results:`
             : 'Search for a book to begin'}
         </h2>
-        <Row>
+        <Row fluid='false'>
           {searchedBooks.map((book) => {
             return (
               <Col md="4">
-                <Card key={book.bookId} border='dark'>
+                <Card key={book.bookId} border='dark' className='mx-1 my-1'>
                   {book.image ? (
                     <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' />
                   ) : null}
                   <Card.Body>
                     <Card.Title>{book.title}</Card.Title>
                     <p className='small'>Authors: {book.authors}</p>
+                    <a href={book.link}><p className='small'>Book Link</p></a>
                     <Card.Text>{book.description}</Card.Text>
                     {Auth.loggedIn() && (
                       <Button
