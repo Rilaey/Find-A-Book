@@ -35,13 +35,34 @@ const resolvers = {
       return { token, user };
     },
     // save book
-    saveBook: async () => {
-
+    saveBook: async (parent, args, context) => {
+      if (context.user) {
+        return User.findOneAndUpdate(
+          { _id: _id },
+          {
+            $addToSet: { savedBooks: args }
+          },
+          {
+            new: true,
+            runValidators: true
+          }
+        );
+      }
+      // If user attempts to execute this mutation and isn't logged in, throw an error
+      throw new AuthenticationError("You need to be logged in!");
     },
     // delete book
-    deleteBook: async (parent, {}) => {
+    deleteBook: async (parent, { bookId }, context) => {
+      if(context.user) {
+        return User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $pull: { savedBooks: bookId } },
+          { new: true }
+        )
+      }
 
-    }
-  }
+      throw new AuthenticationError('You need to be logged in!');
+    },
+  },
 };
 module.exports = resolvers;
