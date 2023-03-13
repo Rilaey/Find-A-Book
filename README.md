@@ -21,7 +21,7 @@
 
 ## Usage
 
-- !["screenshot of homepage"](./client/src/images/homepage.pdf)
+- ![Homepage](./client/src/images/homepage.pdf)
 
 ## License
 
