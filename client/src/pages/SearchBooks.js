@@ -79,7 +79,7 @@ const SearchBooks = () => {
     }
 
     try {
-      const response = await saveBook(bookToSave);
+      const response = await saveBook(bookId, token);
 
       if (!response.ok) {
         throw new Error(error);
